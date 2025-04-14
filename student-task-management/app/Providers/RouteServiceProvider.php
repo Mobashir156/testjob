@@ -10,10 +10,11 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    public const HOME = '/dashboard';
+    public const HOME = '/student/dashboard';
     public const HEADMASTER_HOME = '/headmaster/dashboard';
     public const TEACHER_HOME = '/teacher/dashboard';
     public const STUDENT_HOME = '/student/dashboard';
+    protected $namespace = 'App\Http\Controllers';
 
     public function boot()
     {
@@ -25,6 +26,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/api.php'));
 
             Route::middleware('web')
+                ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
         });
     }

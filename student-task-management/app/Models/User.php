@@ -21,28 +21,47 @@ class User extends Authenticatable
 
     protected $fillable = ['name', 'email', 'password', 'role', 'phone'];
 
-    public function isHeadmaster(): bool {
+    public function isHeadmaster(): bool
+    {
         return $this->role === 'headmaster';
     }
-    public function isTeacher(): bool { return $this->role === 'teacher'; }
-    public function isStudent(): bool { return $this->role === 'student'; }
+    public function isTeacher(): bool
+    {
+        return $this->role === 'teacher';
+    }
+    public function isStudent(): bool
+    {
+        return $this->role === 'student';
+    }
 
     // Relationships
-    public function students(): HasMany { return $this->hasMany(Student::class, 'teacher_id'); }
-    public function myStudents(): HasMany { return $this->hasMany(Student::class, 'user_id'); }
-    public function tasks(): HasMany { return $this->hasMany(Task::class, 'teacher_id'); }
-    public function assignedTasks(): HasMany { return $this->hasMany(Task::class, 'student_id'); }
-    public function announcements(): HasMany { return $this->hasMany(Announcement::class, 'headmaster_id'); }
+    public function students()
+    {
+        return $this->hasMany(Student::class, 'teacher_id');
+    }
+    public function myStudents()
+    {
+        return $this->hasMany(Student::class, 'user_id');
+    }
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'teacher_id');
+    }
+    public function assignedTasks()
+    {
+        return $this->hasMany(Task::class, 'student_id');
+    }
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class, 'headmaster_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
     /**
      * Get the attributes that should be cast.

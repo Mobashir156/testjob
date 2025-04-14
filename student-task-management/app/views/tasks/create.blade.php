@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('appviews::master.app')
 
 @section('header')
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">

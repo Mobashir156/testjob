@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Log;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -43,12 +44,15 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        Log::info('User logged in', [
+            'id' => auth()->id(),
+            'role' => auth()->user()->role,
+            'email' => auth()->user()->email,
+        ]);
+
         // Redirect based on user role
-        $redirectTo = match(auth()->user()->role) {
-            'headmaster' => RouteServiceProvider::HEADMASTER_HOME,
-            'teacher' => RouteServiceProvider::TEACHER_HOME,
-            'student' => RouteServiceProvider::STUDENT_HOME,
-            default => RouteServiceProvider::HOME,
+        $redirectTo = match (auth()->user()->role) {
+            default => route('dashboard'),
         };
 
         return redirect()->intended($redirectTo);

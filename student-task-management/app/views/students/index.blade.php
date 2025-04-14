@@ -1,7 +1,7 @@
-@extends('layouts.app')
+@extends('appviews::master.app')
 
 @section('header')
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+    <h2 class="h4 mb-4">
         @if(auth()->user()->isHeadmaster())
             All Students
         @else
@@ -11,62 +11,63 @@
 @endsection
 
 @section('content')
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 bg-white border-b border-gray-200">
-                @can('createStudent', App\Models\User::class)
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-medium">Student List</h3>
-                    <a href="{{ route('students.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            @can('createStudent', App\Models\User::class)
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title mb-0">Student List</h5>
+                    <a href="{{ route('students.create') }}" class="btn btn-primary btn-sm">
                         Add Student
                     </a>
                 </div>
-                @endcan
+            @endcan
 
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            @if(auth()->user()->isHeadmaster())
+                                <th>Teacher</th>
+                            @endif
+                            <th>Tasks</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($students as $student)
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                                <td>{{ $student->user->name }}</td>
+                                <td>{{ $student->user->email }}</td>
+                                <td>{{ $student->user->phone ?? 'N/A' }}</td>
                                 @if(auth()->user()->isHeadmaster())
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teacher</th>
+                                    <td>{{ $student->teacher->name }}</td>
                                 @endif
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tasks</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                <td>{{ $student->tasks()->count() }}</td>
+                                <td>
+                                    <a href="{{ route('students.show', $student) }}" class="btn btn-link btn-sm text-primary me-2">View</a>
+                                    @can('requestDelete', $student)
+                                        <form action="{{ route('students.request-delete', $student) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-link btn-sm text-danger">Request Delete</button>
+                                        </form>
+                                    @endcan
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse($students as $student)
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $student->user->name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $student->user->email }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $student->user->phone ?? 'N/A' }}</td>
-                                    @if(auth()->user()->isHeadmaster())
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $student->teacher->name }}</td>
-                                    @endif
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $student->tasks()->count() }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="{{ route('students.show', $student) }}" class="text-blue-600 hover:text-blue-900 mr-3">View</a>
-                                        @can('requestDelete', $student)
-                                            <form action="{{ route('students.request-delete', $student) }}" method="POST" class="inline">
-                                                @csrf
-                                                <button type="submit" class="text-red-600 hover:text-red-900">Request Delete</button>
-                                            </form>
-                                        @endcan
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="{{ auth()->user()->isHeadmaster() ? 6 : 5 }}" class="px-6 py-4 text-center text-sm text-gray-500">No students found</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                        @empty
+                            <tr>
+                                <td colspan="{{ auth()->user()->isHeadmaster() ? 6 : 5 }}" class="text-center text-muted">
+                                    No students found
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
+
         </div>
     </div>
 </div>

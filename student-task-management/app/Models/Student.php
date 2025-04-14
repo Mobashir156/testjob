@@ -11,15 +11,15 @@ class Student extends Model
 
     protected $fillable = ['user_id', 'teacher_id'];
 
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
-    public function teacher(): BelongsTo
+    public function teacher()
     {
         return $this->belongsTo(User::class, 'teacher_id');
     }
-    public function tasks(): HasMany
+    public function tasks()
     {
         return $this->hasMany(Task::class);
     }
