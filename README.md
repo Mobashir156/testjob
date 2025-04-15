@@ -29,6 +29,8 @@ find zip code sql file or run command php artisan migrate
 
 if you run php artisan migration you missing some data so you need import zip file under sql file
 
+now run application command php artisan serve
+
 now access this application 
 login data
 headmaster
