@@ -6,6 +6,7 @@ use App\Models\Student;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Events\TaskCreated;
 
 class TaskController extends Controller
 {
@@ -45,7 +46,7 @@ class TaskController extends Controller
             ? $request->file('file')->store('tasks')
             : null;
 
-        Task::create([
+        $task = Task::create([
             'teacher_id' => auth()->id(),
             'student_id' => $request->student_id,
             'title' => $request->title,
@@ -53,6 +54,8 @@ class TaskController extends Controller
             'due_date' => $request->due_date,
             'file_path' => $filePath,
         ]);
+
+        event(new TaskCreated($task));
 
         return redirect()->route('tasks.index')
             ->with('success', 'Task created successfully.');
@@ -168,17 +171,17 @@ class TaskController extends Controller
         $request->validate([
             'feedback' => 'required|string',
         ]);
-    
+
         if (!$task->submission) {
             return back()->with('error', 'No submission found for this task.');
         }
-    
+
         $task->submission->update([
             'feedback' => $request->feedback,
             'feedback_by' => auth()->id(),
             'feedback_at' => now(),
         ]);
-    
+
         return back()->with('success', 'Feedback submitted successfully.');
     }
 

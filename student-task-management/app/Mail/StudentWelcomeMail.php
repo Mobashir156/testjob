@@ -13,8 +13,6 @@ class StudentWelcomeMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    use Queueable, SerializesModels;
-
     public $student;
 
     public function __construct($student)

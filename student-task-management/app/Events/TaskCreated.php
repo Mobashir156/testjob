@@ -2,18 +2,19 @@
 
 namespace App\Events;
 
-use App\Models\Student;
+use App\Models\Task;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class StudentCreated
+class TaskCreated
 {
     use Dispatchable, SerializesModels;
 
-    public $student;
+    public $task;
 
-    public function __construct(Student $student)
+    public function __construct(Task $task)
     {
-        $this->student = $student;
+        $this->task = $task;
     }
 }
+

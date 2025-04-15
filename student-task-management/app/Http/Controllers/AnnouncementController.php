@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Events\AnnouncementCreated;
 
 class AnnouncementController extends Controller
 {
@@ -41,9 +42,9 @@ class AnnouncementController extends Controller
         $extension = strtolower($request->file('image')->getClientOriginalExtension());
         $srcImage = match ($extension) {
             'jpeg', 'jpg' => imagecreatefromjpeg($sourcePath),
-            'png'         => imagecreatefrompng($sourcePath),
-            'gif'         => imagecreatefromgif($sourcePath),
-            default       => abort(415, 'Unsupported image format.'),
+            'png' => imagecreatefrompng($sourcePath),
+            'gif' => imagecreatefromgif($sourcePath),
+            default => abort(415, 'Unsupported image format.'),
         };
 
         // Resize
@@ -62,7 +63,7 @@ class AnnouncementController extends Controller
         imagedestroy($srcImage);
         imagedestroy($resizedImage);
 
-        Announcement::create([
+        $announcement = Announcement::create([
             'headmaster_id' => auth()->id(),
             'title' => $request->title,
             'description' => $request->description,
@@ -71,14 +72,14 @@ class AnnouncementController extends Controller
             'scheduled_at' => $request->scheduled_at,
         ]);
 
-        return redirect()->route('announcements.index')
-            ->with('success', 'Announcement created successfully.');
-    }
+        event(new AnnouncementCreated($announcement));
 
+        return redirect()->route('announcements.index')->with('success', 'Announcement created successfully.');
+    }
 
     public function show(Announcement $announcement)
     {
-       return view('appviews::announcements.show', compact('announcement'));
+        return view('appviews::announcements.show', compact('announcement'));
     }
 
     public function edit(Announcement $announcement)
@@ -88,7 +89,7 @@ class AnnouncementController extends Controller
 
     public function update(Request $request, Announcement $announcement)
     {
-         $request->validate([
+        $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -102,14 +103,14 @@ class AnnouncementController extends Controller
             Storage::delete([$originalPath, $resizedPath]);
 
             $originalPath = $request->file('image')->store('announcements/original');
-            $resizedPath = 'announcements/resized/'.Str::uuid().'.webp';
+            $resizedPath = 'announcements/resized/' . Str::uuid() . '.webp';
 
-            Image::make(storage_path('app/'.$originalPath))
+            Image::make(storage_path('app/' . $originalPath))
                 ->resize(800, null, function ($constraint) {
                     $constraint->aspectRatio();
                 })
                 ->encode('webp', 75)
-                ->save(storage_path('app/'.$resizedPath));
+                ->save(storage_path('app/' . $resizedPath));
         }
 
         $announcement->update([
@@ -120,8 +121,7 @@ class AnnouncementController extends Controller
             'scheduled_at' => $request->scheduled_at,
         ]);
 
-        return redirect()->route('announcements.index')
-            ->with('success', 'Announcement updated successfully.');
+        return redirect()->route('announcements.index')->with('success', 'Announcement updated successfully.');
     }
 
     public function destroy(Announcement $announcement)
@@ -129,16 +129,12 @@ class AnnouncementController extends Controller
         Storage::delete([$announcement->original_image_path, $announcement->resized_image_path]);
         $announcement->delete();
 
-        return redirect()->route('announcements.index')
-            ->with('success', 'Announcement deleted successfully.');
+        return redirect()->route('announcements.index')->with('success', 'Announcement deleted successfully.');
     }
 
     public function studentIndex()
     {
-        $announcements = Announcement::where('scheduled_at', '<=', now())
-            ->where('is_sent', true)
-            ->latest()
-            ->paginate(10);
+        $announcements = Announcement::where('scheduled_at', '<=', now())->where('is_sent', true)->latest()->paginate(10);
 
         return view('appviews::announcements.student-index', compact('announcements'));
     }

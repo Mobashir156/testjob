@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use App\Events\StudentCreated;
 
 class StudentController extends Controller
 {
@@ -27,85 +28,82 @@ class StudentController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|confirmed|min:8',
-            'phone' => 'nullable|string|max:20',
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|confirmed|min:8',
+        'phone' => 'nullable|string|max:20',
+    ]);
+
+    $student = null;
+
+    DB::transaction(function () use ($request, &$student) {
+        $defaultPermissions = [
+            'tasks' => [
+                'edit' => false,
+                'create' => false,
+                'delete' => false,
+                'submit' => true,
+                'approve' => false,
+                'give_feedback' => false,
+                'view_assigned' => true,
+            ],
+            'profile' => [
+                'edit' => true,
+                'view' => true,
+                'change_password' => true,
+            ],
+            'students' => [
+                'edit' => false,
+                'create' => false,
+                'delete' => false,
+                'view_own' => true,
+                'request_delete' => false,
+            ],
+            'teachers' => [
+                'edit' => false,
+                'view' => false,
+                'create' => false,
+                'delete' => false,
+                'manage_permissions' => false,
+            ],
+            'dashboard' => [
+                'view' => true,
+            ],
+            'announcements' => [
+                'edit' => false,
+                'view' => false,
+                'create' => false,
+                'delete' => false,
+                'publish' => false,
+            ],
+        ];
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'phone' => $request->phone,
+            'role' => 'student',
+            'permission' => json_encode($defaultPermissions),
         ]);
 
-        DB::transaction(function () use ($request) {
-            $defaultPermissions = [
-                'tasks' => [
-                    'edit' => false,
-                    'create' => false,
-                    'delete' => false,
-                    'submit' => true,
-                    'approve' => false,
-                    'give_feedback' => false,
-                    'view_assigned' => true,
-                ],
-                'profile' => [
-                    'edit' => true,
-                    'view' => true,
-                    'change_password' => true,
-                ],
-                'students' => [
-                    'edit' => false,
-                    'create' => false,
-                    'delete' => false,
-                    'view_own' => true,
-                    'request_delete' => false,
-                ],
-                'teachers' => [
-                    'edit' => false,
-                    'view' => false,
-                    'create' => false,
-                    'delete' => false,
-                    'manage_permissions' => false,
-                ],
-                'dashboard' => [
-                    'view' => true,
-                ],
-                'announcements' => [
-                    'edit' => false,
-                    'view' => false,
-                    'create' => false,
-                    'delete' => false,
-                    'publish' => false,
-                ],
-            ];
+        $student = Student::create([
+            'user_id' => $user->id,
+            'teacher_id' => auth()->id(),
+            'roll_number' => $request->roll_number,
+            'class' => $request->class,
+            'section' => $request->section,
+        ]);
+    });
+    // Event to notify that a student has been created
+    event(new StudentCreated($student));
 
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-                'phone' => $request->phone,
-                'role' => 'student',
-                'permission' => json_encode($defaultPermissions),
-            ]);
+    return redirect()->route('students.index')
+        ->with('success', 'Student created successfully.');
+}
 
-            Student::create([
-                'user_id' => $user->id,
-                'teacher_id' => auth()->id(),
-                'roll_number' => $request->roll_number,
-                'class' => $request->class,
-                'section' => $request->section,
-            ]);
-
-            // Send welcome email to student
-            Mail::to($user->email)->send(new StudentWelcomeMail($student));
-
-            // Send notification to headmaster
-            $headmaster = User::where('role', 'headmaster')->first();
-            if ($headmaster) {
-                Mail::to($headmaster->email)->send(new HeadmasterNotificationMail($student));
-            }
-        });
-
-        return redirect()->route('students.index')->with('success', 'Student created successfully.');
-    }
 
     public function show(Student $student)
     {

@@ -5,7 +5,6 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 
-
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -22,8 +21,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $viewsPath = base_path('app/views');
-    \Log::info('Views path: ' . $viewsPath);
+        \Log::info('Views path: ' . $viewsPath);
 
-    View::addNamespace('appviews', $viewsPath);
+        View::addNamespace('appviews', $viewsPath);
     }
 }
