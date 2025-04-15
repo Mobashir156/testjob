@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 15, 2025 at 05:01 AM
+-- Generation Time: Apr 15, 2025 at 01:57 PM
 -- Server version: 5.7.24
 -- PHP Version: 8.2.14
 
@@ -45,7 +45,10 @@ CREATE TABLE `announcements` (
 --
 
 INSERT INTO `announcements` (`id`, `headmaster_id`, `title`, `description`, `original_image_path`, `resized_image_path`, `scheduled_at`, `is_sent`, `created_at`, `updated_at`) VALUES
-(1, 1, 'KKJKJ', 'KKJK', 'announcements/original/rioMfIDyPJFsiBLzARaknYnTERZjLoefZ5iVJoeY.jpg', 'announcements/resized/44d5a6c3-dc03-46cb-9071-d894cf9cc0cf.webp', '2025-04-15 04:18:00', 0, '2025-04-14 22:35:49', '2025-04-14 22:35:49');
+(6, 1, 'tet', 'tet', 'announcements/original/92fcd0a52b784ed4e0c3f417b40b654e.jpg', 'announcements/resized/8061c3d2-b1d4-4edd-ba7d-3e83bbb47056.webp', '2025-04-15 13:44:00', 0, '2025-04-15 07:47:03', '2025-04-15 07:47:03'),
+(7, 1, 'test', 'test', 'announcements/original/2ea2a02bc28a6b272aa7afc4a17e08b4.jpg', 'announcements/resized/7ca23837-e771-4025-bee9-33748b690e86.webp', '2025-04-15 13:48:00', 0, '2025-04-15 07:48:04', '2025-04-15 07:48:04'),
+(8, 1, 'tet', 'test', 'announcements/original/yen9XiLxmXt9bKtCeWO3FaVAM6ZSiwRpuYw4Wdua.jpg', 'announcements/resized/79677b5b-d175-4c31-be74-b1e13fa3175f.webp', '2025-04-15 13:49:00', 0, '2025-04-15 07:49:09', '2025-04-15 07:49:09'),
+(9, 1, 'new', 'new', 'announcements/original/YSWf6ghkFUxNvCLETLhLFrKRGkBYvc3NOOq98bAq.jpg', 'announcements/resized/49d8ec7b-9409-45a2-8f62-d22ecd8e3439.webp', '2025-04-15 13:50:00', 0, '2025-04-15 07:50:45', '2025-04-15 07:50:45');
 
 -- --------------------------------------------------------
 
@@ -179,8 +182,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('D5OcFYHFs1GkMU2gd8rKXP3AkSaX9Q3kNzp618xT', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiQkR3dGhhNE9Ib3FDRE9Qd1o1ZWhTR0R3Nm9LZXhlUGx0R2NIc2wyQiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjQyOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYW5ub3VuY2VtZW50cy9jcmVhdGUiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1744659432),
-('NrFvNYIgKvtZpgmOYpEJwo2qb87Vq4yrqvkREX1O', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiTTJ4T2pGVUhEaXQ1Y2VvVDJuN2swa3g5ZkNod1ZkcXB0OVRXRjlCbCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjIxOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1744693269);
+('FJxXiZi0BkLwJ1TYv9Jwi9GRq07sB47uqwSTC7xu', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiem9kbUpZSzBzeHczVmVwdTRuUDFqZTRVNGtVSWFLRGZBUDV5TnBxbCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjIxOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1744725332);
 
 -- --------------------------------------------------------
 
@@ -206,7 +208,7 @@ CREATE TABLE `students` (
 
 INSERT INTO `students` (`id`, `user_id`, `teacher_id`, `class`, `section`, `roll_number`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 3, 2, NULL, NULL, NULL, '2025-04-13 12:06:32', '2025-04-13 12:06:32', NULL),
-(2, 4, 2, '10', 'a', '1', '2025-04-14 07:23:17', '2025-04-14 07:23:17', NULL);
+(8, 10, 2, '10', 'a', '1', '2025-04-15 06:46:20', '2025-04-15 06:46:20', NULL);
 
 -- --------------------------------------------------------
 
@@ -225,6 +227,13 @@ CREATE TABLE `submissions` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `submissions`
+--
+
+INSERT INTO `submissions` (`id`, `task_id`, `notes`, `file_path`, `feedback`, `feedback_by`, `feedback_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'dfdffdf', NULL, 'nice', 2, '2025-04-15 17:08:03', '2025-04-15 10:54:30', '2025-04-15 11:10:26');
 
 -- --------------------------------------------------------
 
@@ -250,7 +259,11 @@ CREATE TABLE `tasks` (
 --
 
 INSERT INTO `tasks` (`id`, `teacher_id`, `student_id`, `title`, `description`, `approved_at`, `approved_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 2, 1, 'Math test', 'htyyy', '2025-04-14 12:02:51', 1, '2025-04-14 06:56:33', '2025-04-14 12:02:51', NULL);
+(1, 2, 1, 'Math test', 'htyyy', '2025-04-14 12:02:51', 1, '2025-04-14 06:56:33', '2025-04-14 12:02:51', NULL),
+(2, 2, 1, 'test', 'hig', '2025-04-15 12:43:02', 1, '2025-04-15 12:37:33', '2025-04-15 12:43:02', NULL),
+(3, 2, 8, 'math task', 'test', '2025-04-15 07:12:59', 1, '2025-04-15 06:55:41', '2025-04-15 07:12:59', NULL),
+(4, 2, 8, 'math task', 'test', '2025-04-15 07:12:57', 1, '2025-04-15 06:56:04', '2025-04-15 07:12:57', NULL),
+(5, 2, 8, 'hi', 'hi', '2025-04-15 07:12:54', 1, '2025-04-15 06:56:59', '2025-04-15 07:12:54', NULL);
 
 -- --------------------------------------------------------
 
@@ -267,7 +280,7 @@ CREATE TABLE `users` (
   `role` enum('headmaster','teacher','student') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'student',
   `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `permissions` json DEFAULT NULL,
+  `permissions` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -278,10 +291,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `role`, `phone`, `remember_token`, `permissions`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Mobashir Raihan', 'mobashirraihan125@gmail.com', NULL, '$2y$12$8w/uRK1zVK.TyhyZ9ojil.8P/WC7rG0KYtCaRm1jMK2ciGviWehI2', 'headmaster', '01628095603', NULL, '{\"tasks\": {\"edit\": true, \"create\": true, \"delete\": true, \"submit\": false, \"approve\": true, \"view_all\": true, \"give_feedback\": false}, \"profile\": {\"edit\": true, \"view\": true, \"change_password\": true}, \"students\": {\"edit\": true, \"create\": true, \"delete\": true, \"view_all\": true, \"request_delete\": true}, \"teachers\": {\"edit\": true, \"view\": true, \"create\": true, \"delete\": true, \"manage_permissions\": true}, \"dashboard\": {\"view\": true}, \"announcements\": {\"edit\": true, \"view\": true, \"create\": true, \"delete\": true, \"publish\": true}}', '2025-04-13 12:04:00', '2025-04-14 05:56:05', NULL),
-(2, 'Fahim hasan', 'teacher@gmail.com', NULL, '$2y$12$7Ai8lCUMtRuXSeghBSPA2ukz3k0RBRZFZFafosW/TxVzY93sPDYyS', 'teacher', NULL, NULL, '{\"tasks\": {\"edit\": true, \"view\": true, \"create\": true, \"submit\": false, \"approve\": false, \"delete_own\": true, \"give_feedback\": true}, \"profile\": {\"edit\": true, \"view\": true, \"change_password\": true}, \"students\": {\"create\": true, \"delete\": false, \"edit_own\": true, \"view_own\": true, \"request_delete\": true}, \"teachers\": {\"edit\": false, \"view\": false, \"create\": false, \"delete\": false, \"manage_permissions\": false}, \"dashboard\": {\"view\": true}, \"announcements\": {\"edit\": false, \"view\": true, \"create\": false, \"delete\": false, \"publish\": false}}', '2025-04-13 12:05:14', '2025-04-13 12:05:14', NULL),
-(3, 'Fahim hasan', 'student@gmail.com', NULL, '$2y$12$5Jq1a261kplkQYXmnegiO.RCUp7e5Y8a3RXv3TAWNg6m92ocFcdPC', 'student', NULL, NULL, '{\"tasks\": {\"edit\": false, \"create\": false, \"delete\": false, \"submit\": true, \"approve\": false, \"give_feedback\": false, \"view_assigned\": true}, \"profile\": {\"edit\": true, \"view\": true, \"change_password\": true}, \"students\": {\"edit\": false, \"create\": false, \"delete\": false, \"view_own\": true, \"request_delete\": false}, \"teachers\": {\"edit\": false, \"view\": false, \"create\": false, \"delete\": false, \"manage_permissions\": false}, \"dashboard\": {\"view\": true}, \"announcements\": {\"edit\": false, \"view\": true, \"create\": false, \"delete\": false, \"publish\": false}}', '2025-04-13 12:06:32', '2025-04-13 12:06:32', NULL),
-(4, 'Mobashir Raihan', 'onlinelearningpoint83@gmail.com', NULL, '$2y$12$nw9y1msAdg7uHyr4ee3OJOm2j6YCwjblQseboVm45jkgKGWYe0kwy', 'student', '01789957078', NULL, '{\"tasks\": {\"edit\": false, \"create\": false, \"delete\": false, \"submit\": true, \"approve\": false, \"give_feedback\": false, \"view_assigned\": true}, \"profile\": {\"edit\": true, \"view\": true, \"change_password\": true}, \"students\": {\"edit\": false, \"create\": false, \"delete\": false, \"view_own\": true, \"request_delete\": false}, \"teachers\": {\"edit\": false, \"view\": false, \"create\": false, \"delete\": false, \"manage_permissions\": false}, \"dashboard\": {\"view\": true}, \"announcements\": {\"edit\": false, \"view\": true, \"create\": false, \"delete\": false, \"publish\": false}}', '2025-04-14 07:23:17', '2025-04-14 07:23:17', NULL);
+(1, 'Mobashir Raihan', 'mobashirraihan125@gmail.com', NULL, '$2y$12$8w/uRK1zVK.TyhyZ9ojil.8P/WC7rG0KYtCaRm1jMK2ciGviWehI2', 'headmaster', '01628095603', NULL, '{\"tasks\": {\"edit\": true, \"create\": true, \"delete\": true, \"submit\": false, \"approve\": true, \"view_all\": true, \"give_feedback\": false}, \"profile\": {\"edit\": true, \"view\": true, \"change_password\": true}, \"students\": {\"edit\": true, \"create\": true, \"delete\": true, \"view_all\": true, \"request_delete\": false}, \"teachers\": {\"edit\": true, \"view\": true, \"create\": true, \"delete\": true, \"manage_permissions\": true}, \"dashboard\": {\"view\": true}, \"announcements\": {\"edit\": true, \"view\": true, \"create\": true, \"delete\": true, \"publish\": true}}', '2025-04-13 12:04:00', '2025-04-14 05:56:05', NULL),
+(2, 'Fahim hasan', 'teacher@gmail.com', NULL, '$2y$12$7Ai8lCUMtRuXSeghBSPA2ukz3k0RBRZFZFafosW/TxVzY93sPDYyS', 'teacher', NULL, NULL, '{\"tasks\": {\"edit\": true, \"view\": true, \"create\": true, \"submit\": false, \"approve\": false, \"delete_own\": true, \"give_feedback\": true}, \"profile\": {\"edit\": true, \"view\": true, \"change_password\": true}, \"students\": {\"create\": true, \"delete\": true, \"edit_own\": true, \"view_all\": true, \"request_delete\": true}, \"teachers\": {\"edit\": false, \"view\": false, \"create\": false, \"delete\": false, \"manage_permissions\": false}, \"dashboard\": {\"view\": true}, \"announcements\": {\"edit\": false, \"view\": false, \"create\": false, \"delete\": false, \"publish\": false}}', '2025-04-13 12:05:14', '2025-04-13 12:05:14', NULL),
+(3, 'Fahim hasan', 'student@gmail.com', NULL, '$2y$12$5Jq1a261kplkQYXmnegiO.RCUp7e5Y8a3RXv3TAWNg6m92ocFcdPC', 'student', NULL, NULL, '{\"tasks\": {\"edit\": false, \"create\": false, \"delete\": false, \"submit\": true, \"approve\": false, \"give_feedback\": false, \"view_assigned\": true}, \"profile\": {\"edit\": true, \"view\": true, \"change_password\": true}, \"students\": {\"edit\": false, \"create\": false, \"delete\": false, \"view_own\": true, \"request_delete\": false}, \"teachers\": {\"edit\": false, \"view\": false, \"create\": false, \"delete\": false, \"manage_permissions\": false}, \"dashboard\": {\"view\": true}, \"announcements\": {\"edit\": false, \"view\": false, \"create\": false, \"delete\": false, \"publish\": false}}', '2025-04-13 12:06:32', '2025-04-13 12:06:32', NULL),
+(10, 'Mobashir Raihan', 'onlinelearningpoint83@gmail.com', NULL, '$2y$12$GGHXF6NNpFhgcdOmX.bMiul0sfkbjahByRgGVof0oh08Na9OnYS7e', 'student', '01789957078', NULL, NULL, '2025-04-15 06:46:20', '2025-04-15 06:46:20', NULL);
 
 --
 -- Indexes for dumped tables
@@ -386,7 +399,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `announcements`
 --
 ALTER TABLE `announcements`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -398,7 +411,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -410,25 +423,25 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `submissions`
 --
 ALTER TABLE `submissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
