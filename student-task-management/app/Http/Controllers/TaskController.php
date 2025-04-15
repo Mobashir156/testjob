@@ -17,8 +17,9 @@ class TaskController extends Controller
             })
             ->latest()
             ->paginate(10);
+        //dd($tasks);
 
-        return view('tasks.index', compact('tasks'));
+        return view('appviews::tasks.index', compact('tasks'));
     }
 
     public function create()
@@ -27,7 +28,7 @@ class TaskController extends Controller
             ->with('user')
             ->get();
 
-        return view('tasks.create', compact('students'));
+        return view('appviews::tasks.create', compact('students'));
     }
 
     public function store(Request $request)
@@ -59,26 +60,22 @@ class TaskController extends Controller
 
     public function show(Task $task)
     {
-        $this->authorize('view', $task);
+        //$this->authorize('view', $task);
 
-        return view('tasks.show', compact('task'));
+        return view('appviews::tasks.show', compact('task'));
     }
 
     public function edit(Task $task)
     {
-        $this->authorize('update', $task);
-
         $students = Student::where('teacher_id', auth()->id())
             ->with('user')
             ->get();
 
-        return view('tasks.edit', compact('task', 'students'));
+        return view('appviews::tasks.edit', compact('task', 'students'));
     }
 
     public function update(Request $request, Task $task)
     {
-        $this->authorize('update', $task);
-
         $request->validate([
             'student_id' => 'required|exists:students,id,teacher_id,'.auth()->id(),
             'title' => 'required|string|max:255',
@@ -110,8 +107,6 @@ class TaskController extends Controller
 
     public function destroy(Task $task)
     {
-        $this->authorize('delete', $task);
-
         if ($task->file_path) {
             Storage::delete($task->file_path);
         }
@@ -124,8 +119,6 @@ class TaskController extends Controller
 
     public function approve(Task $task)
     {
-        $this->authorize('approve', $task);
-
         $task->update([
             'approved_at' => now(),
             'approved_by' => auth()->id(),
@@ -142,20 +135,16 @@ class TaskController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('tasks.student-index', compact('tasks'));
+        return view('appviews::tasks.index', compact('tasks'));
     }
 
     public function studentShow(Task $task)
     {
-        $this->authorize('viewAsStudent', $task);
-
-        return view('tasks.student-show', compact('task'));
+        return view('appviews::tasks.show', compact('task'));
     }
 
     public function submit(Request $request, Task $task)
     {
-        $this->authorize('submit', $task);
-
         $request->validate([
             'notes' => 'required|string',
             'file' => 'nullable|file|max:2048',
@@ -175,8 +164,6 @@ class TaskController extends Controller
 
     public function giveFeedback(Request $request, Task $task)
     {
-        $this->authorize('giveFeedback', $task);
-
         $request->validate([
             'feedback' => 'required|string',
         ]);

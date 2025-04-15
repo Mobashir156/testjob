@@ -9,7 +9,7 @@ class Student extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'teacher_id'];
+    protected $fillable = ['user_id', 'teacher_id','roll_number','class','section'];
 
     public function user()
     {

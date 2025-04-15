@@ -1,50 +1,46 @@
 @extends('appviews::master.app')
 
 @section('header')
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Add New Teacher
-    </h2>
+    <h2 class="h4 mb-4">Add New Teacher</h2>
 @endsection
 
 @section('content')
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 bg-white border-b border-gray-200">
+<div class="py-4">
+    <div class="container">
+        <div class="card shadow-sm">
+            <div class="card-body">
                 <form method="POST" action="{{ route('teachers.store') }}">
                     @csrf
 
-                    <div class="grid grid-cols-1 gap-6">
-                        <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                            <input type="text" name="name" id="name" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                        </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" name="name" id="name" required class="form-control">
+                    </div>
 
-                        <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                            <input type="email" name="email" id="email" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                        </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" name="email" id="email" required class="form-control">
+                    </div>
 
-                        <div>
-                            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                            <input type="password" name="password" id="password" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                        </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" name="password" id="password" required class="form-control">
+                    </div>
 
-                        <div>
-                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-                            <input type="password" name="password_confirmation" id="password_confirmation" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                        </div>
+                    <div class="mb-3">
+                        <label for="password_confirmation" class="form-label">Confirm Password</label>
+                        <input type="password" name="password_confirmation" id="password_confirmation" required class="form-control">
+                    </div>
 
-                        <div>
-                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
-                            <input type="text" name="phone" id="phone" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                        </div>
+                    <div class="mb-4">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="text" name="phone" id="phone" class="form-control">
+                    </div>
 
-                        <div class="flex justify-end">
-                            <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                Save Teacher
-                            </button>
-                        </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">
+                            Save Teacher
+                        </button>
                     </div>
                 </form>
             </div>

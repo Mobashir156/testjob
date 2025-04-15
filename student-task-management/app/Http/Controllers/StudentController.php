@@ -43,11 +43,15 @@ class StudentController extends Controller
                 'password' => bcrypt($request->password),
                 'phone' => $request->phone,
                 'role' => 'student',
+                'permission' => "",
             ]);
 
             Student::create([
                 'user_id' => $user->id,
                 'teacher_id' => auth()->id(),
+                'roll_number' => $request->roll_number,
+                'class' => $request->class,
+                'section' => $request->section,
             ]);
         });
 
@@ -57,21 +61,21 @@ class StudentController extends Controller
 
     public function show(Student $student)
     {
-        $this->authorize('view', $student);
+        //$this->authorize('view', $student);
 
-        return view('students.show', compact('student'));
+        return view('appviews::students.show', compact('student'));
     }
 
     public function edit(Student $student)
     {
-        $this->authorize('update', $student);
+        //$this->authorize('update', $student);
 
         return view('students.edit', compact('student'));
     }
 
     public function update(Request $request, Student $student)
     {
-        $this->authorize('update', $student);
+       // $this->authorize('update', $student);
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -93,7 +97,7 @@ class StudentController extends Controller
 
     public function requestDelete(Student $student)
     {
-        $this->authorize('requestDelete', $student);
+        //$this->authorize('requestDelete', $student);
         return back()->with('success', 'Deletion request sent to headmaster.');
     }
 }

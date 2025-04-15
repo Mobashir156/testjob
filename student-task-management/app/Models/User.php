@@ -19,7 +19,7 @@ class User extends Authenticatable
      */
     use HasFactory, Notifiable, SoftDeletes;
 
-    protected $fillable = ['name', 'email', 'password', 'role', 'phone'];
+    protected $fillable = ['name', 'email', 'password', 'role', 'phone','permissions'];
 
     public function isHeadmaster(): bool
     {
@@ -73,6 +73,27 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'permissions' => 'array',
         ];
+    }
+
+    public function hasPermission($key)
+    {
+        if ($this->role === 'headmaster') {
+            return true;
+        }
+
+        $keys = explode('.', $key);
+        $permissions = json_decode($this->permissions, true);
+
+        $current = $permissions;
+        foreach ($keys as $k) {
+            if (!isset($current[$k])) {
+                return false;
+            }
+            $current = $current[$k];
+        }
+
+        return $current === true;
     }
 }

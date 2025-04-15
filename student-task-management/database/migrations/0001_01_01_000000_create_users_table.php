@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role', ['headmaster', 'teacher', 'student'])->default('student');
             $table->string('phone')->nullable();
+            $table->json('permissions')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

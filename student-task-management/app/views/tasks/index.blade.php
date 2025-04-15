@@ -1,35 +1,74 @@
 @extends('appviews::master.app')
 
 @section('header')
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Tasks
-    </h2>
+    <h2 class="h4 mb-4">Tasks</h2>
 @endsection
 
 @section('content')
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 bg-white border-b border-gray-200">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-medium">Task List</h3>
-                    <a href="{{ route('tasks.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
-                        Create Task
-                    </a>
-                </div>
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Task List</h5>
+                @if (auth()->user()->hasPermission('tasks.create'))
+                <a href="{{ route('tasks.create') }}" class="btn btn-primary btn-sm">
+                    Create Task
+                </a>
+                @endif
+            </div>
 
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-sm align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Title</th>
+                            <th>Student</th>
+                            <th>Status</th>
+                            <th>Submission</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($tasks as $task)
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submission</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                <td>{{ $task->title }}</td>
+                                <td>{{ $task->student->user->name }}</td>
+                                <td>
+                                    @if($task->approved_at)
+                                        <span class="badge bg-success">Approved</span>
+                                    @else
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($task->submission)
+                                        <span class="badge bg-primary">Submitted</span>
+                                    @else
+                                        <span class="badge bg-secondary">Not Submitted</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('tasks.show', $task) }}" class="btn btn-link btn-sm text-decoration-none text-primary">View</a>
+                                    @can('approve', $task)
+                                        @if(!$task->approved_at)
+                                            <form action="{{ route('tasks.approve', $task) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-link btn-sm text-success p-0">Approve</button>
+                                            </form>
+                                        @endif
+                                    @endcan
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse($tasks as $task)
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">No tasks found</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+@endsection

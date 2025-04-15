@@ -11,19 +11,19 @@ class Task extends Model
 
     protected $fillable = ['teacher_id', 'student_id', 'title', 'description', 'approved_at', 'approved_by'];
 
-    public function teacher(): BelongsTo
+    public function teacher()
     {
         return $this->belongsTo(User::class, 'teacher_id');
     }
-    public function student(): BelongsTo
+    public function student()
     {
         return $this->belongsTo(Student::class);
     }
-    public function approver(): BelongsTo
+    public function approver()
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
-    public function submission(): HasOne
+    public function submission()
     {
         return $this->hasOne(Submission::class);
     }
