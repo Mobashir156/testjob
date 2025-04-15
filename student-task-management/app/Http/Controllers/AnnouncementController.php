@@ -32,23 +32,42 @@ class AnnouncementController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'scheduled_at' => 'required|date|after:now',
         ]);
+        // Store original image
+        $originalPath = $request->file('image')->store('public/announcements/original');
+        $originalPublicPath = str_replace('public/', '', $originalPath); // Path for DB
+        $sourcePath = Storage::path($originalPath);
 
-        $originalPath = $request->file('image')->store('announcements/original');
-        $resizedPath = 'announcements/resized/'.Str::uuid().'.webp';
+        // Load image using GD
+        $extension = strtolower($request->file('image')->getClientOriginalExtension());
+        $srcImage = match ($extension) {
+            'jpeg', 'jpg' => imagecreatefromjpeg($sourcePath),
+            'png'         => imagecreatefrompng($sourcePath),
+            'gif'         => imagecreatefromgif($sourcePath),
+            default       => abort(415, 'Unsupported image format.'),
+        };
 
-        $image = Image::make(storage_path('app/'.$originalPath))
-            ->resize(800, null, function ($constraint) {
-                $constraint->aspectRatio();
-            })
-            ->encode('webp', 75)
-            ->save(storage_path('app/'.$resizedPath));
+        // Resize
+        $newWidth = 800;
+        $newHeight = intval((imagesy($srcImage) / imagesx($srcImage)) * $newWidth);
+        $resizedImage = imagescale($srcImage, $newWidth, $newHeight);
+        if ($resizedImage === false) {
+            imagedestroy($srcImage);
+            abort(500, 'Failed to resize image.');
+        }
+        $resizedFilename = 'public/announcements/resized/' . Str::uuid() . '.webp';
+        $resizedPath = Storage::path($resizedFilename);
+        Storage::makeDirectory(dirname($resizedFilename)); // Ensure directory exists
+        imagewebp($resizedImage, $resizedPath, 75);
+
+        imagedestroy($srcImage);
+        imagedestroy($resizedImage);
 
         Announcement::create([
             'headmaster_id' => auth()->id(),
             'title' => $request->title,
             'description' => $request->description,
-            'original_image_path' => $originalPath,
-            'resized_image_path' => $resizedPath,
+            'original_image_path' => $originalPublicPath,
+            'resized_image_path' => str_replace('public/', '', $resizedFilename),
             'scheduled_at' => $request->scheduled_at,
         ]);
 
@@ -56,25 +75,20 @@ class AnnouncementController extends Controller
             ->with('success', 'Announcement created successfully.');
     }
 
+
     public function show(Announcement $announcement)
     {
-        $this->authorize('view', $announcement);
-
-        return view('announcements.show', compact('announcement'));
+       return view('announcements.show', compact('announcement'));
     }
 
     public function edit(Announcement $announcement)
     {
-        $this->authorize('update', $announcement);
-
         return view('announcements.edit', compact('announcement'));
     }
 
     public function update(Request $request, Announcement $announcement)
     {
-        $this->authorize('update', $announcement);
-
-        $request->validate([
+         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -112,8 +126,6 @@ class AnnouncementController extends Controller
 
     public function destroy(Announcement $announcement)
     {
-        $this->authorize('delete', $announcement);
-
         Storage::delete([$announcement->original_image_path, $announcement->resized_image_path]);
         $announcement->delete();
 

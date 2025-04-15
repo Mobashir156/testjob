@@ -12,4 +12,9 @@ class Announcement extends Model
     {
         return $this->belongsTo(User::class, 'headmaster_id');
     }
+
+    protected $casts = [
+       'scheduled_at' => 'datetime',
+    ];
+
 }

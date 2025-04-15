@@ -16,6 +16,7 @@ use App\Http\Controllers\ProfileController;
 |--------------------------------------------------------------------------
 */
 
+
 // Authentication Routes
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
