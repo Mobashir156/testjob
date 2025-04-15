@@ -46,7 +46,7 @@ class TeacherController extends Controller
                 'request_delete' => true,
             ],
             'tasks' => [
-                'view_own' => true,
+                'view' => true,
                 'create' => true,
                 'edit_own' => true,
                 'delete_own' => true,

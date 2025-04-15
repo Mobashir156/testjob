@@ -36,13 +36,54 @@ class StudentController extends Controller
         ]);
 
         DB::transaction(function () use ($request) {
+            $defaultPermissions = [
+                'tasks' => [
+                    'edit' => false,
+                    'create' => false,
+                    'delete' => false,
+                    'submit' => true,
+                    'approve' => false,
+                    'give_feedback' => false,
+                    'view_assigned' => true,
+                ],
+                'profile' => [
+                    'edit' => true,
+                    'view' => true,
+                    'change_password' => true,
+                ],
+                'students' => [
+                    'edit' => false,
+                    'create' => false,
+                    'delete' => false,
+                    'view_own' => true,
+                    'request_delete' => false,
+                ],
+                'teachers' => [
+                    'edit' => false,
+                    'view' => false,
+                    'create' => false,
+                    'delete' => false,
+                    'manage_permissions' => false,
+                ],
+                'dashboard' => [
+                    'view' => true,
+                ],
+                'announcements' => [
+                    'edit' => false,
+                    'view' => false,
+                    'create' => false,
+                    'delete' => false,
+                    'publish' => false,
+                ],
+            ];
+
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
                 'phone' => $request->phone,
                 'role' => 'student',
-                'permission' => "",
+                'permission' => json_encode($defaultPermissions),
             ]);
 
             Student::create([
@@ -52,10 +93,18 @@ class StudentController extends Controller
                 'class' => $request->class,
                 'section' => $request->section,
             ]);
+
+            // Send welcome email to student
+            Mail::to($user->email)->send(new StudentWelcomeMail($student));
+
+            // Send notification to headmaster
+            $headmaster = User::where('role', 'headmaster')->first();
+            if ($headmaster) {
+                Mail::to($headmaster->email)->send(new HeadmasterNotificationMail($student));
+            }
         });
 
-        return redirect()->route('students.index')
-            ->with('success', 'Student created successfully.');
+        return redirect()->route('students.index')->with('success', 'Student created successfully.');
     }
 
     public function show(Student $student)
@@ -72,45 +121,35 @@ class StudentController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
-                Rule::unique('users')->ignore($student->user_id),
-            ],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($student->user_id)],
             'phone' => 'nullable|string|max:20',
         ]);
 
         $student->user->update($request->only(['name', 'email', 'phone']));
 
-        return redirect()->route('students.index')
-            ->with('success', 'Student updated successfully.');
+        return redirect()->route('students.index')->with('success', 'Student updated successfully.');
     }
-    
+
     public function approveDelete($id)
     {
         //dd('ok');
         $student = Student::withTrashed()->where('id', $id)->firstOrFail();
-    
+
         $user = User::withTrashed()->find($student->user_id);
-    
+
         if ($user) {
             $user->forceDelete();
         }
-    
+
         $student->forceDelete();
-    
+
         return back()->with('success', 'Student deleted permanently.');
     }
-
-
 
     public function requestDelete(Student $student)
     {
         $student->delete();
-    
+
         return back()->with('success', 'Deletion request sent to headmaster.');
     }
-
 }
