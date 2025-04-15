@@ -57,7 +57,7 @@ class AnnouncementController extends Controller
         }
         $resizedFilename = 'public/announcements/resized/' . Str::uuid() . '.webp';
         $resizedPath = Storage::path($resizedFilename);
-        Storage::makeDirectory(dirname($resizedFilename)); // Ensure directory exists
+        Storage::makeDirectory(dirname($resizedFilename));
         imagewebp($resizedImage, $resizedPath, 75);
 
         imagedestroy($srcImage);
