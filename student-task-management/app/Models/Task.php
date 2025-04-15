@@ -10,6 +10,10 @@ class Task extends Model
     use SoftDeletes;
 
     protected $fillable = ['teacher_id', 'student_id', 'title', 'description', 'approved_at', 'approved_by'];
+    
+    protected $casts = [
+       'approved_at' => 'date',
+    ];
 
     public function teacher()
     {

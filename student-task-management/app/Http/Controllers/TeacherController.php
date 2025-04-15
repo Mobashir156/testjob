@@ -12,12 +12,12 @@ class TeacherController extends Controller
     {
         $teachers = User::where('role', 'teacher')->withCount('students')->latest()->paginate(10);
 
-        return view('teachers.index', compact('teachers'));
+        return view('appviews::teachers.index', compact('teachers'));
     }
 
     public function create()
     {
-        return view('teachers.create');
+        return view('appviews::teachers.create');
     }
 
     public function store(Request $request)

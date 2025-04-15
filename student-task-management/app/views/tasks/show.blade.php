@@ -48,11 +48,11 @@
                     </div>
                 @endif
 
-                @can('submit', $task)
-                    @if(!$task->submission)
+                @if (auth()->user()->hasPermission('tasks.submit'))
+                    @if (!$task->submission)
                         <div class="mt-4">
                             <h6>Submit Your Work</h6>
-                            <form method="POST" action="{{ route('tasks.submit', $task) }}" enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('student.tasks.submit', $task) }}" enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="notes" class="form-label">Notes</label>
@@ -66,10 +66,11 @@
                             </form>
                         </div>
                     @endif
-                @endcan
+                @endif
 
-                @can('giveFeedback', $task)
-                    @if($task->submission && !$task->submission->feedback)
+
+                @if (auth()->user()->hasPermission('tasks.give_feedback'))
+                    @if ($task->submission && !$task->submission->feedback)
                         <div class="mt-4">
                             <h6>Provide Feedback</h6>
                             <form method="POST" action="{{ route('tasks.feedback', $task) }}">
@@ -82,7 +83,8 @@
                             </form>
                         </div>
                     @endif
-                @endcan
+                @endif
+
             </div>
         </div>
     </div>

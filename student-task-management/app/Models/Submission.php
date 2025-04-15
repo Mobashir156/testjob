@@ -6,13 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Submission extends Model
 {
-    protected $fillable = ['task_id', 'notes', 'file_path', 'feedback', 'feedback_by'];
+    protected $fillable = ['task_id', 'notes', 'file_path', 'feedback', 'feedback_by','feedback_at'];
+    
+    protected $casts = [
+       'feedback_at' => 'date',
+    ];
 
-    public function task(): BelongsTo
+    public function task()
     {
         return $this->belongsTo(Task::class);
     }
-    public function feedbackProvider(): BelongsTo
+    public function feedbackProvider()
     {
         return $this->belongsTo(User::class, 'feedback_by');
     }

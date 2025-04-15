@@ -10,7 +10,7 @@ class ProfileController extends Controller
 {
     public function edit()
     {
-        return view('profile.edit');
+        return view('appviews::profile.edit');
     }
 
     public function update(Request $request)

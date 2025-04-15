@@ -9,6 +9,8 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +18,12 @@ use App\Http\Controllers\ProfileController;
 |--------------------------------------------------------------------------
 */
 
+Route::get('/generate', function () {
+        Artisan::call('view:clear');
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        return 'successfully.';
+});
 
 // Authentication Routes
 Route::middleware('guest')->group(function () {
@@ -40,11 +48,11 @@ Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name(
     // Tasks - accessible by all roles, control with policies or permission checks
     Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index'); // Teachers, Headmasters
     Route::post('tasks/{task}/approve', [TaskController::class, 'approve'])->name('tasks.approve');
-    Route::resource('tasks', TaskController::class)->except(['index']); // Teachers only (controlled in controller)
-
-    // Student-specific task routes
+    Route::resource('tasks', TaskController::class); 
+    
+    Route::post('/tasks/{task}/feedback', [TaskController::class, 'giveFeedback'])->name('tasks.feedback');
     Route::prefix('student/tasks')->middleware('role:student')->group(function () {
-        Route::get('/', [TaskController::class, 'studentIndex'])->name('student.tasks.index');
+        Route::get('/', [TaskController::class, 'studentIndex'])->name('tasks.student.index');
         Route::get('/{task}', [TaskController::class, 'studentShow'])->name('student.tasks.show');
         Route::post('/{task}/submit', [TaskController::class, 'submit'])->name('student.tasks.submit');
     });
@@ -52,7 +60,8 @@ Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name(
     // Teacher & Headmaster manage students
     Route::resource('students', StudentController::class);
     Route::post('students/{student}/request-delete', [StudentController::class, 'requestDelete'])->name('students.request-delete');
-
+    Route::get('students/approve/{student}', [StudentController::class, 'approveDelete'])
+    ->name('students.approve-delete');
     // Headmaster only
     Route::middleware('role:headmaster')->group(function () {
         Route::resource('teachers', TeacherController::class)->only(['index', 'create', 'store']);
@@ -60,6 +69,6 @@ Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name(
     });
 
     // Student Announcements
-    Route::get('announcements/student', [AnnouncementController::class, 'studentIndex'])->middleware('role:student')->name('announcements.student.index');
+    Route::get('announcements-student', [AnnouncementController::class, 'studentIndex'])->middleware('role:student')->name('announcements.student.index');
 });
 

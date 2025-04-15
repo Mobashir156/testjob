@@ -23,4 +23,9 @@ class Student extends Model
     {
         return $this->hasMany(Task::class);
     }
+    
+    public function assignedTasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 }

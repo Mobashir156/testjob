@@ -16,12 +16,12 @@ class AnnouncementController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('announcements.index', compact('announcements'));
+        return view('appviews::announcements.index', compact('announcements'));
     }
 
     public function create()
     {
-        return view('announcements.create');
+        return view('appviews::announcements.create');
     }
 
     public function store(Request $request)
@@ -34,7 +34,7 @@ class AnnouncementController extends Controller
         ]);
         // Store original image
         $originalPath = $request->file('image')->store('public/announcements/original');
-        $originalPublicPath = str_replace('public/', '', $originalPath); // Path for DB
+        $originalPublicPath = str_replace('public/', '', $originalPath);
         $sourcePath = Storage::path($originalPath);
 
         // Load image using GD
@@ -78,12 +78,12 @@ class AnnouncementController extends Controller
 
     public function show(Announcement $announcement)
     {
-       return view('announcements.show', compact('announcement'));
+       return view('appviews::announcements.show', compact('announcement'));
     }
 
     public function edit(Announcement $announcement)
     {
-        return view('announcements.edit', compact('announcement'));
+        return view('appviews::announcements.edit', compact('announcement'));
     }
 
     public function update(Request $request, Announcement $announcement)
@@ -140,6 +140,6 @@ class AnnouncementController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('announcements.student-index', compact('announcements'));
+        return view('appviews::announcements.student-index', compact('announcements'));
     }
 }

@@ -49,7 +49,7 @@ class User extends Authenticatable
     }
     public function assignedTasks()
     {
-        return $this->hasMany(Task::class, 'student_id');
+        return $this->hasMany(Task::class);
     }
     public function announcements()
     {
@@ -82,18 +82,26 @@ class User extends Authenticatable
         if ($this->role === 'headmaster') {
             return true;
         }
-
+    
+        // Check if the permissions are already an array. If not, decode the JSON string.
+        $permissions = is_array($this->permissions) ? $this->permissions : json_decode($this->permissions, true);
+    
+        if ($permissions === null) {
+            // Handle the case where decoding fails
+            return false;
+        }
+    
         $keys = explode('.', $key);
-        $permissions = json_decode($this->permissions, true);
-
         $current = $permissions;
+    
         foreach ($keys as $k) {
             if (!isset($current[$k])) {
                 return false;
             }
             $current = $current[$k];
         }
-
-        return $current === true;
+    
+        return $current === true; 
     }
+
 }

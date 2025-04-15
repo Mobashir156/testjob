@@ -13,18 +13,17 @@ class StudentController extends Controller
     public function index()
     {
         $students = Student::with(['user', 'teacher'])
-            ->when(auth()->user()->isTeacher(), function ($query) {
-                return $query->where('teacher_id', auth()->id());
-            })
+            ->withTrashed()
+            ->when(auth()->user()->isTeacher(), fn($q) => $q->where('teacher_id', auth()->id()))
             ->latest()
             ->paginate(10);
 
-        return view('students.index', compact('students'));
+        return view('appviews::students.index', compact('students'));
     }
 
     public function create()
     {
-        return view('students.create');
+        return view('appviews::students.create');
     }
 
     public function store(Request $request)
@@ -61,22 +60,16 @@ class StudentController extends Controller
 
     public function show(Student $student)
     {
-        //$this->authorize('view', $student);
-
         return view('appviews::students.show', compact('student'));
     }
 
     public function edit(Student $student)
     {
-        //$this->authorize('update', $student);
-
-        return view('students.edit', compact('student'));
+        return view('appviews::students.edit', compact('student'));
     }
 
     public function update(Request $request, Student $student)
     {
-       // $this->authorize('update', $student);
-
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => [
@@ -94,10 +87,30 @@ class StudentController extends Controller
         return redirect()->route('students.index')
             ->with('success', 'Student updated successfully.');
     }
+    
+    public function approveDelete($id)
+    {
+        //dd('ok');
+        $student = Student::withTrashed()->where('id', $id)->firstOrFail();
+    
+        $user = User::withTrashed()->find($student->user_id);
+    
+        if ($user) {
+            $user->forceDelete();
+        }
+    
+        $student->forceDelete();
+    
+        return back()->with('success', 'Student deleted permanently.');
+    }
+
+
 
     public function requestDelete(Student $student)
     {
-        //$this->authorize('requestDelete', $student);
+        $student->delete();
+    
         return back()->with('success', 'Deletion request sent to headmaster.');
     }
+
 }

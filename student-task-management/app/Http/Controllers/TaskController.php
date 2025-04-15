@@ -129,12 +129,13 @@ class TaskController extends Controller
 
     public function studentIndex()
     {
-        $tasks = auth()->user()->assignedTasks()
-            ->whereNotNull('approved_at')
+        $user = auth()->user();
+        $student = Student::where('user_id',$user->id)->first();
+        $tasks = Task::where('student_id',$student->id)->whereNotNull('approved_at')
             ->with(['teacher', 'submission'])
             ->latest()
             ->paginate(10);
-
+//dd($tasks);
         return view('appviews::tasks.index', compact('tasks'));
     }
 
@@ -167,13 +168,18 @@ class TaskController extends Controller
         $request->validate([
             'feedback' => 'required|string',
         ]);
-
+    
+        if (!$task->submission) {
+            return back()->with('error', 'No submission found for this task.');
+        }
+    
         $task->submission->update([
             'feedback' => $request->feedback,
             'feedback_by' => auth()->id(),
             'feedback_at' => now(),
         ]);
-
+    
         return back()->with('success', 'Feedback submitted successfully.');
     }
+
 }

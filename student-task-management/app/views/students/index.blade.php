@@ -14,14 +14,16 @@
 <div class="container py-4">
     <div class="card shadow-sm">
         <div class="card-body">
-            @can('createStudent', App\Models\User::class)
+            
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="card-title mb-0">Student List</h5>
+                    @if(auth()->user()->hasPermission('students.create'))
                     <a href="{{ route('students.create') }}" class="btn btn-primary btn-sm">
                         Add Student
                     </a>
+                    @endif
                 </div>
-            @endcan
+            
 
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
@@ -40,8 +42,8 @@
                     <tbody>
                         @forelse($students as $student)
                             <tr>
-                                <td>{{ $student->user->name }}</td>
-                                <td>{{ $student->user->email }}</td>
+                                <td>{{ $student->user->name ?? 'N/A' }}</td>
+                                <td>{{ $student->user->email?? 'N/A' }}</td>
                                 <td>{{ $student->user->phone ?? 'N/A' }}</td>
                                 @if(auth()->user()->isHeadmaster())
                                     <td>{{ $student->teacher->name }}</td>
@@ -49,12 +51,20 @@
                                 <td>{{ $student->tasks()->count() }}</td>
                                 <td>
                                     <a href="{{ route('students.show', $student) }}" class="btn btn-link btn-sm text-primary me-2">View</a>
-                                    @can('requestDelete', $student)
+                                    @if(auth()->user()->hasPermission('students.request_delete') && is_null($student->deleted_at))
+                                     @if(auth()->user()->role === 'teacher')
                                         <form action="{{ route('students.request-delete', $student) }}" method="POST" class="d-inline">
                                             @csrf
                                             <button type="submit" class="btn btn-link btn-sm text-danger">Request Delete</button>
                                         </form>
-                                    @endcan
+                                    @endif
+                                    @elseif(auth()->user()->role === 'headmaster' && $student->trashed())
+                                        <a href="{{ route('students.approve-delete', $student->id) }}" 
+                                           onclick="return confirm('Permanently delete this student?')">
+                                           Accept Request
+                                        </a>
+                                    @endif
+
                                 </td>
                             </tr>
                         @empty

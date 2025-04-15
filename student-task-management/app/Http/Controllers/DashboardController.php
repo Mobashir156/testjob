@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Student;
+use App\Models\Announcement;
 
 class DashboardController extends Controller
 {
@@ -27,14 +29,21 @@ class DashboardController extends Controller
         }
 
         if ($user->isStudent()) {
+            $student = Student::where('user_id', $user->id)->first();
             return view('appviews::dashboard.student', [
-                'assignedTaskCount' => $user->assignedTasks()->whereNotNull('approved_at')->count(),
-                'completedTaskCount' => $user->assignedTasks()->whereNotNull('approved_at')->has('submission')->count(),
-                'pendingFeedbackCount' => $user->assignedTasks()
+                'assignedTaskCount' => $student->assignedTasks()->whereNotNull('approved_at')->count(),
+                'completedTaskCount' => $student->assignedTasks()->whereNotNull('approved_at')->has('submission')->count(),
+                'pendingFeedbackCount' => $student->assignedTasks()
                     ->whereNotNull('approved_at')
                     ->whereHas('submission', function($q) {
                         $q->whereNull('feedback');
                     })->count(),
+                'tasks' => $student->assignedTasks()->whereNotNull('approved_at')->latest()->take(3)->get(),
+                'notice' => Announcement::where('scheduled_at', '<=', now())
+                            ->where('is_sent', true)
+                            ->latest()
+                            ->take(3)
+                            ->get(),
             ]);
         }
 

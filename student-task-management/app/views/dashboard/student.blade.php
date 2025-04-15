@@ -67,7 +67,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach(auth()->user()->assignedTasks()->whereNotNull('approved_at')->latest()->take(3)->get() as $task)
+                        @foreach($tasks as $task)
                         <tr>
                             <td>{{ $task->title }}</td>
                             <td>{{ $task->due_date ? $task->due_date->format('M d, Y') : 'No due date' }}</td>
@@ -79,10 +79,44 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('tasks.student.show', $task) }}" class="btn btn-sm btn-outline-primary">
+                                <a href="{{ route('student.tasks.show', $task) }}" class="btn btn-sm btn-outline-primary">
                                     View
                                 </a>
                             </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Upcoming Annoucement</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Image</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($notice as $task)
+                        <tr>
+                            <td>{{ $task->title }}</td>
+                            <td>{{ $task->description }}</td>
+                            <td>
+                                @if($task->resized_image_path)
+                                    <div class="my-4">
+                                        <img src="{{ Storage::url($task->resized_image_path) }}" alt="Announcement Image" class="max-w-full h-auto rounded-lg">
+                                    </div>
+                                @endif
+                            </td>
+                            
                         </tr>
                         @endforeach
                     </tbody>

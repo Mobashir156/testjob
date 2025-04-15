@@ -21,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::addNamespace('appviews', base_path('app/Views'));
+        $viewsPath = base_path('app/views');
+    \Log::info('Views path: ' . $viewsPath);
+
+    View::addNamespace('appviews', $viewsPath);
     }
 }
